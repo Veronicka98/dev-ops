@@ -18,26 +18,20 @@ import subprocess
 # +++your code here+++
 # Write functions and modify main() to call them
 
-def get_special_paths(dir):    
-    filenames = os.listdir(dir)
+def get_special_paths(dir):
     special = []
-    for f in filenames:
-        print(f)
-        if "." in f:
+    for root, dirs, files in os.walk(dir):
+        for f in files:
             if "__what__" in f:
-                special.append(os.path.abspath(os.path.join(dir, f)))
-        else:
-            morefiles = os.listdir(f)
-            for fi in morefiles:
-                if "__what__" in fi:
-                    special.append(os.path.abspath(os.path.join(dir +"\\"+ f, fi)))
+                special.append(os.path.abspath(os.path.join(root, f)))
+
     return special
 
 def copy_to(paths, dir):
     filenames = os.listdir(dir)
     for f in paths:
         if os.path.basename(f) in filenames:
-            print ("nothing")
+            print ("file is already in the given directory")
         else:
             print(f)
             if os.path.isfile(f):
@@ -48,10 +42,11 @@ def copy_to(paths, dir):
 
 
 def zip_to(paths, zippath):
-    command = "zip -j " + zippath
+    command = "zip " + zippath
     for path in paths:
         command = command + " " + path
-    subprocess.call(command,shell=True) //doesnt work on windows
+    print(command)
+    subprocess.call(command,shell=True) #zip exe for windows: http://stahlworks.com/dev/index.php?tool=zipunzip
 
 
 def main():
