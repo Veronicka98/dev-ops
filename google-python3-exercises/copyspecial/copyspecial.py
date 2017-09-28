@@ -18,6 +18,40 @@ import subprocess
 # +++your code here+++
 # Write functions and modify main() to call them
 
+def get_special_paths(dir):    
+    filenames = os.listdir(dir)
+    special = []
+    for f in filenames:
+        print(f)
+        if "." in f:
+            if "__what__" in f:
+                special.append(os.path.abspath(os.path.join(dir, f)))
+        else:
+            morefiles = os.listdir(f)
+            for fi in morefiles:
+                if "__what__" in fi:
+                    special.append(os.path.abspath(os.path.join(dir +"\\"+ f, fi)))
+    return special
+
+def copy_to(paths, dir):
+    filenames = os.listdir(dir)
+    for f in paths:
+        if os.path.basename(f) in filenames:
+            print ("nothing")
+        else:
+            print(f)
+            if os.path.isfile(f):
+                if os.path.exists(dir):
+                    shutil.copy(f, dir)
+            else:
+                print("doesnt exist")
+
+
+def zip_to(paths, zippath):
+    command = "zip -j " + zippath
+    for path in paths:
+        command = command + " " + path
+    subprocess.call(command,shell=True) //doesnt work on windows
 
 
 def main():
@@ -37,19 +71,24 @@ def main():
   todir = ''
   if args[0] == '--todir':
     todir = args[1]
+    copy_to( get_special_paths(args[2]), todir)
     del args[0:2]
 
   tozip = ''
   if args[0] == '--tozip':
     tozip = args[1]
+    zip_to(get_special_paths(args[2]), tozip)
     del args[0:2]
 
   if len(args) == 0:
     print("error: must specify one or more dirs")
     sys.exit(1)
-
+  else:
+    special = get_special_paths(args[0])
+    print(special)
   # +++your code here+++
   # Call your functions
-  
+
+
 if __name__ == "__main__":
   main()
