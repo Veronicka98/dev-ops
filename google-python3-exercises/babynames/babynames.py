@@ -40,8 +40,26 @@ def extract_names(filename):
   followed by the name-rank strings in alphabetical order.
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
-  # +++your code here+++
-  return
+
+  f = open(filename, 'r')
+  lines = f.read()
+
+  l = []
+
+  year = re.findall(r'([0-9]+)', lines);
+  for y in year:
+      if len(y) == 4:
+          l.append(y)
+
+  ranksandnames = re.findall(r'td>([\w0-9]+)</td>', lines);
+  lastrank = ""
+  for i in ranksandnames:
+      if i.isdigit():
+          lastrank = i
+      else:
+          l.append(i + " " + lastrank)
+
+  return l
 
 
 def main():
@@ -61,8 +79,10 @@ def main():
     del args[0]
 
   # +++your code here+++
+  ans = extract_names(args[0])
+  print (ans)
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
-  
+
 if __name__ == '__main__':
   main()
