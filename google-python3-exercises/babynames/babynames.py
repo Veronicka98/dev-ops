@@ -46,7 +46,7 @@ def extract_names(filename):
 
   l = []
 
-  year = re.findall(r'([0-9]+)', lines);
+  year = re.findall(r'(\d\d\d\d+)', lines);
   for y in year:
       if len(y) == 4:
           l.append(y)
